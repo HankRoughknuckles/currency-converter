@@ -1,35 +1,32 @@
 import styled from "styled-components";
-import { useCallback, useState } from "react";
+import {
+  ConversionType,
+  useExchangeRateContext,
+} from "../hooks/useExchangeRate.tsx";
+import { useCallback } from "react";
 
 const LargeClickableArrow = styled.div`
   font-size: 3rem;
   cursor: pointer;
 `;
 
-enum Direction {
-  FromCzk = "FromCzk",
-  FromForeignCurrency = "FromForeignCurrency",
-}
-
-const FROM_FOREIGN_CURRENCY_ICON = "⬅️";
+const TO_CZK_ICON = "⬅️";
 const FROM_CZK_ICON = "➡️";
 
 export const ToggleConversionDirectionButton = () => {
-  const [direction, setDirection] = useState<Direction>(Direction.FromCzk);
+  const { conversionType, setConversionType } = useExchangeRateContext();
 
   const onClick = useCallback(() => {
-    if (direction === Direction.FromCzk) {
-      setDirection(Direction.FromForeignCurrency);
+    if (conversionType === ConversionType.fromCzk) {
+      setConversionType(ConversionType.toCzk);
     } else {
-      setDirection(Direction.FromCzk);
+      setConversionType(ConversionType.fromCzk);
     }
-  }, [direction, setDirection]);
+  }, [conversionType, setConversionType]);
 
   return (
     <LargeClickableArrow onClick={onClick}>
-      {direction === Direction.FromCzk
-        ? FROM_CZK_ICON
-        : FROM_FOREIGN_CURRENCY_ICON}
+      {conversionType === ConversionType.fromCzk ? FROM_CZK_ICON : TO_CZK_ICON}
     </LargeClickableArrow>
   );
 };

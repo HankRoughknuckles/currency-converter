@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { CzkDropdown } from "./CzkDropdown.tsx";
 import { ToggleConversionDirectionButton } from "./ToggleConversionDirectionButton.tsx";
 import { CurrencyDropdown } from "./CurrencyDropdown.tsx";
 import { PositiveNumberInput } from "./PositiveNumberInput.tsx";
-import { useExchangeRateContext } from "../hooks/useExchangeRate.tsx";
+import {
+  ConversionType,
+  useExchangeRateContext,
+} from "../hooks/useExchangeRate.tsx";
 import { DECIMAL_PLACES } from "../lib/constants.ts";
 
 const Container = styled.div`
@@ -20,25 +23,70 @@ const Spacer = styled.div`
 `;
 
 export const ConversionForm = () => {
-  const { unitsPerCzk } = useExchangeRateContext();
+  const { unitsPerCzk, czkPerUnit, conversionType } = useExchangeRateContext();
   const [czkValue, setCzkValue] = useState<string>("");
-  const [foreignValue, setForeignValue] = useState<string>("");
+  const [foreignCurrencyValue, setForeignCurrencyValue] = useState<string>("");
+  const czkInputRef = useRef<HTMLInputElement>(null);
+  const foreignCurrencyInputRef = useRef<HTMLInputElement>(null);
 
-  /** update foreign currency value when czk value changes */
-  useEffect(() => {
-    if (czkValue === "" || unitsPerCzk === undefined) {
-      setForeignValue("");
-      return;
+  const onCzkInputChange = useCallback(
+    (input: string) => {
+      if (unitsPerCzk === undefined) return;
+      setCzkValue(input);
+      setForeignCurrencyValue(
+        (Number(input) * unitsPerCzk).toFixed(DECIMAL_PLACES),
+      );
+    },
+    [unitsPerCzk],
+  );
+
+  const onForeignCurrencyInputChange = useCallback(
+    (input: string) => {
+      if (czkPerUnit === undefined) return;
+      setForeignCurrencyValue(input);
+      setCzkValue((Number(input) * czkPerUnit).toFixed(DECIMAL_PLACES));
+    },
+    [czkPerUnit],
+  );
+
+  /** dynamically updates based on input, conversion type, and selected currency */
+  const displayedForeignCurrencyValue = useMemo(() => {
+    if (unitsPerCzk === undefined) return "";
+
+    return conversionType === ConversionType.toCzk
+      ? foreignCurrencyValue
+      : (Number(czkValue) * unitsPerCzk).toFixed(DECIMAL_PLACES);
+  }, [conversionType, czkValue, foreignCurrencyValue, unitsPerCzk]);
+
+  /** dynamically updates based on input, conversion type, and selected currency */
+  const displayedCzkValue = useMemo(() => {
+    if (czkPerUnit === undefined) return "";
+
+    return conversionType === ConversionType.fromCzk
+      ? czkValue
+      : (Number(foreignCurrencyValue) * czkPerUnit).toFixed(DECIMAL_PLACES);
+  }, [conversionType, czkPerUnit, czkValue, foreignCurrencyValue]);
+
+  const focusInputsOnDirectionChange = useCallback(() => {
+    if (conversionType === ConversionType.toCzk) {
+      foreignCurrencyInputRef?.current?.focus();
+    } else {
+      czkInputRef?.current?.focus();
     }
-    const foreignValue = Number(czkValue) * unitsPerCzk;
-    setForeignValue(foreignValue.toFixed(DECIMAL_PLACES));
-  }, [czkValue, unitsPerCzk]);
+  }, [conversionType]);
+
+  useEffect(focusInputsOnDirectionChange, [focusInputsOnDirectionChange]);
 
   return (
     <Container>
       <div>
         <CzkDropdown />
-        <PositiveNumberInput value={czkValue} onChange={setCzkValue} />
+        <PositiveNumberInput
+          ref={czkInputRef}
+          value={displayedCzkValue}
+          onChange={onCzkInputChange}
+          disabled={conversionType === ConversionType.toCzk}
+        />
       </div>
       <Spacer>
         <ToggleConversionDirectionButton />
@@ -46,9 +94,10 @@ export const ConversionForm = () => {
       <div>
         <CurrencyDropdown />
         <PositiveNumberInput
-          value={foreignValue}
-          onChange={() => {}}
-          disabled
+          ref={foreignCurrencyInputRef}
+          value={displayedForeignCurrencyValue}
+          onChange={onForeignCurrencyInputChange}
+          disabled={conversionType === ConversionType.fromCzk}
         />
       </div>
     </Container>
