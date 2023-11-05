@@ -17,6 +17,11 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const Logo = styled.img`
+  height: 7rem;
+  width: 7rem;
+`;
+
 export const App = () => {
   const { isError } = useExchangeRateContext();
 
@@ -24,6 +29,7 @@ export const App = () => {
 
   return (
     <Container>
+      <Logo src={"/lion.svg"} />
       <h1>Currency Converter</h1>
       <ExchangeRateInfo />
       <ConversionForm />
