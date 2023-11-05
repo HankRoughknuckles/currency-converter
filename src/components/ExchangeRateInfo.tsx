@@ -3,6 +3,7 @@ import {
   useExchangeRateContext,
 } from "../hooks/useExchangeRate.tsx";
 import styled from "styled-components";
+import { DECIMAL_PLACES } from "../lib/constants.ts";
 
 const Container = styled.div`
   display: flex;
@@ -39,7 +40,9 @@ export const ExchangeRateInfo = () => {
   const arrow = conversionType === ConversionType.fromCzk ? "→" : "←";
 
   const czkAmount =
-    conversionType === ConversionType.toCzk ? czkPerUnit?.toFixed(3) : 1;
+    conversionType === ConversionType.toCzk
+      ? czkPerUnit?.toFixed(DECIMAL_PLACES)
+      : 1;
   const foreignCurrencyAmount =
     conversionType === ConversionType.fromCzk ? unitsPerCzk?.toFixed(3) : 1;
 
