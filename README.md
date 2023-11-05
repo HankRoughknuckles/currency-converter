@@ -1,27 +1,23 @@
-# React + TypeScript + Vite
+# Currency Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app was made using vite on the frontend and expressJS on the backend.
+You can see the backend repo here - https://github.com/HankRoughknuckles/currency-converter-backend
 
-Currently, two official plugins are available:
+The reason for the backend is that CNB's CORS policy only allows things from their domain to access their API.  Therefore
+I created a backend that would call CNB's api, but has a CORS policy that allows our frontend to access it.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Also, the backend parses the raw data from CNB and outputs it in a more standardized, readable format. This also allows
+the backend to be pluggable, allowing us to easily use a different source for the exchange rates with only a small
+amount of code changes.
 
-## Expanding the ESLint configuration
+## Installation
+`npm install`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Usage
+### Development
+`npm run dev`
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Tests
+`npm run test`
+or to turn on watch mode:
+`npm run test:watch`
