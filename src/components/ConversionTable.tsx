@@ -22,7 +22,7 @@ export const ConversionTable = () => {
 
     return sortedData.map((currency) => {
       return (
-        <tr>
+        <tr key={currency.code}>
           <DataCell>{currency.code}</DataCell>
           <DataCell>{currency.country}</DataCell>
           <DataCell>{firstLetterToUpperCase(currency.currencyName)}</DataCell>
