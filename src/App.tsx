@@ -3,6 +3,7 @@ import { ConversionForm } from "./components/ConversionForm";
 import "./App.css";
 import { useExchangeRateContext } from "./hooks/useExchangeRate.tsx";
 import { ExchangeRateInfo } from "./components/ExchangeRateInfo.tsx";
+import { ConversionTable } from "./components/ConversionTable.tsx";
 
 const Container = styled.div`
   position: absolute;
@@ -22,6 +23,10 @@ const Logo = styled.img`
   width: 7rem;
 `;
 
+const TableContainer = styled.div`
+  height: 10vh;
+`;
+
 export const App = () => {
   const { isError } = useExchangeRateContext();
 
@@ -33,6 +38,10 @@ export const App = () => {
       <h1>Currency Converter</h1>
       <ExchangeRateInfo />
       <ConversionForm />
+      <TableContainer>
+        <h2>Exchange Rates</h2>
+        <ConversionTable />
+      </TableContainer>
     </Container>
   );
 };
