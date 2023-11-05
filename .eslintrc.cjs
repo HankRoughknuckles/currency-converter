@@ -19,6 +19,6 @@ module.exports = {
     browser: true,
     es2020: true
   },
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/gql/types'],
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
   rules: {},
 }

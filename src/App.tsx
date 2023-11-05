@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { ConversionForm } from "./components/ConversionForm.tsx";
+import { ConversionForm } from "./components/ConversionForm";
 import "./App.css";
+import { useExchangeRateContext } from "./hooks/useExchangeRate.tsx";
+import { ExchangeRateInfo } from "./components/ExchangeRateInfo.tsx";
 
 const Container = styled.div`
   position: absolute;
@@ -16,10 +18,14 @@ const Container = styled.div`
 `;
 
 export const App = () => {
+  const { isError } = useExchangeRateContext();
+
+  if (isError) alert("There was an error while fetching the exchange rates");
+
   return (
     <Container>
       <h1>Currency Converter</h1>
-      <h2>1 CZK = 0.04 EUR</h2>
+      <ExchangeRateInfo />
       <ConversionForm />
     </Container>
   );
