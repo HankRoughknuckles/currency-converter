@@ -1,10 +1,8 @@
 import Select from "react-select";
-import { StyledInput } from "./StyledInput.tsx";
 
 const options = [{ value: "CZK", label: "CZK" }];
 
-export const CzkInput = () => {
-  // TODO: use CurrencyDropdown instaed of copy/pasting the Select
+export const CzkDropdown = () => {
   return (
     <>
       <Select
@@ -16,7 +14,6 @@ export const CzkInput = () => {
         name="targetCurrency"
         options={options}
       />
-      <StyledInput />
     </>
   );
 };
