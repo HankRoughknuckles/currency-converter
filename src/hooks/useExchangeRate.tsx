@@ -1,7 +1,9 @@
 import {
   createContext,
+  Dispatch,
   FC,
   PropsWithChildren,
+  SetStateAction,
   useContext,
   useEffect,
   useMemo,
@@ -9,6 +11,11 @@ import {
 } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchExchangeRates, Rate } from "../api/cnb.ts";
+
+export enum ConversionType {
+  toCzk = "toCzk",
+  fromCzk = "fromCzk",
+}
 
 interface ExchangeRateState {
   /** If the API is still fetching the exchange rates */
@@ -27,6 +34,10 @@ interface ExchangeRateState {
   unitsPerCzk: number | undefined;
   /** How many CZK are in 1 of the selected currency (example:) USD */
   czkPerUnit: number | undefined;
+  /** Whether the conversion is from CZK to the selected currency or the other way around */
+  conversionType: ConversionType;
+  /** Sets the conversion type as either fromCzk or ToCzk */
+  setConversionType: Dispatch<SetStateAction<ConversionType>>;
 }
 
 const initialState = {
@@ -38,6 +49,8 @@ const initialState = {
   selectedCurrencyCode: undefined,
   unitsPerCzk: undefined,
   czkPerUnit: undefined,
+  conversionType: ConversionType.fromCzk,
+  setConversionType: () => {},
 };
 
 /** Hook for storing the information about the exchange rates */
@@ -46,6 +59,10 @@ const _useExchangeRateState = (): ExchangeRateState => {
     queryKey: ["exchangeRates"],
     queryFn: fetchExchangeRates,
   });
+
+  const [conversionType, setConversionType] = useState<ConversionType>(
+    ConversionType.fromCzk,
+  );
 
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<
     string | undefined
@@ -77,6 +94,8 @@ const _useExchangeRateState = (): ExchangeRateState => {
     selectedCurrencyCode,
     unitsPerCzk,
     czkPerUnit: selectedCurrency?.czkPerUnit,
+    conversionType,
+    setConversionType,
   };
 };
 
