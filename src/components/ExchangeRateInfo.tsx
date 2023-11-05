@@ -44,7 +44,9 @@ export const ExchangeRateInfo = () => {
       ? czkPerUnit?.toFixed(DECIMAL_PLACES)
       : 1;
   const foreignCurrencyAmount =
-    conversionType === ConversionType.fromCzk ? unitsPerCzk?.toFixed(3) : 1;
+    conversionType === ConversionType.fromCzk
+      ? unitsPerCzk?.toFixed(DECIMAL_PLACES)
+      : 1;
 
   if (isPending) return <h2>Loading...</h2>;
   return (
