@@ -11,7 +11,7 @@ export const CurrencyDropdown = () => {
   const options = useMemo(() => {
     return (data ?? []).map((currencyInfo) => ({
       value: currencyInfo.code,
-      label: currencyInfo.code,
+      label: `${currencyInfo.code} (${currencyInfo.country})`,
     }));
   }, [data]);
 
