@@ -77,6 +77,24 @@ export const ConversionForm = () => {
 
   useEffect(focusInputsOnDirectionChange, [focusInputsOnDirectionChange]);
 
+  const recalculateValuesOnDirectionChange = useCallback(() => {
+    if (conversionType === ConversionType.toCzk) {
+      onForeignCurrencyInputChange(foreignCurrencyValue);
+    } else {
+      onCzkInputChange(czkValue);
+    }
+  }, [
+    conversionType,
+    czkValue,
+    foreignCurrencyValue,
+    onCzkInputChange,
+    onForeignCurrencyInputChange,
+  ]);
+
+  useEffect(recalculateValuesOnDirectionChange, [
+    recalculateValuesOnDirectionChange,
+  ]);
+
   return (
     <Container>
       <div>
