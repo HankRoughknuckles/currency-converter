@@ -13,7 +13,7 @@ const Container = styled.div`
 const LeftSection = styled.h2`
   flex: 2;
   text-align: right;
-  width: 12rem;
+  width: 15rem;
 `;
 
 const MiddleSection = styled.h2`
@@ -24,7 +24,7 @@ const MiddleSection = styled.h2`
 const RightSection = styled.h2`
   flex: 2;
   text-align: left;
-  width: 12rem;
+  width: 15rem;
 `;
 
 export const ExchangeRateInfo = () => {
