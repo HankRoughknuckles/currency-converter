@@ -41,11 +41,11 @@ export const ExchangeRateInfo = () => {
 
   const czkAmount =
     conversionType === ConversionType.toCzk
-      ? czkPerUnit?.toFixed(DECIMAL_PLACES)
+      ? `~ ${czkPerUnit?.toFixed(DECIMAL_PLACES)}`
       : 1;
   const foreignCurrencyAmount =
     conversionType === ConversionType.fromCzk
-      ? unitsPerCzk?.toFixed(DECIMAL_PLACES)
+      ? `~ ${unitsPerCzk?.toFixed(DECIMAL_PLACES)}`
       : 1;
 
   if (isPending) return <h2>Loading...</h2>;
