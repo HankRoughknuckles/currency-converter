@@ -1,7 +1,11 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { CzkInput } from "./CzkInput.tsx";
+import { CzkDropdown } from "./CzkDropdown.tsx";
 import { ToggleConversionDirectionButton } from "./ToggleConversionDirectionButton.tsx";
-import { ForeignCurrencyInput } from "./ForeignCurrencyInput.tsx";
+import { CurrencyDropdown } from "./CurrencyDropdown.tsx";
+import { PositiveNumberInput } from "./PositiveNumberInput.tsx";
+import { useExchangeRateContext } from "../hooks/useExchangeRate.tsx";
+import { DECIMAL_PLACES } from "../lib/constants.ts";
 
 const Container = styled.div`
   display: flex;
@@ -16,16 +20,36 @@ const Spacer = styled.div`
 `;
 
 export const ConversionForm = () => {
+  const { unitsPerCzk } = useExchangeRateContext();
+  const [czkValue, setCzkValue] = useState<string>("");
+  const [foreignValue, setForeignValue] = useState<string>("");
+
+  /** update foreign currency value when czk value changes */
+  useEffect(() => {
+    if (czkValue === "" || unitsPerCzk === undefined) {
+      setForeignValue("");
+      return;
+    }
+    const foreignValue = Number(czkValue) * unitsPerCzk;
+    setForeignValue(foreignValue.toFixed(DECIMAL_PLACES));
+  }, [czkValue, unitsPerCzk]);
+
   return (
     <Container>
       <div>
-        <CzkInput />
+        <CzkDropdown />
+        <PositiveNumberInput value={czkValue} onChange={setCzkValue} />
       </div>
       <Spacer>
         <ToggleConversionDirectionButton />
       </Spacer>
       <div>
-        <ForeignCurrencyInput />
+        <CurrencyDropdown />
+        <PositiveNumberInput
+          value={foreignValue}
+          onChange={() => {}}
+          disabled
+        />
       </div>
     </Container>
   );
