@@ -36,7 +36,7 @@ export const ExchangeRateInfo = () => {
     conversionType,
   } = useExchangeRateContext();
 
-  const arrow = conversionType === ConversionType.fromCzk ? "👉" : "👈";
+  const arrow = conversionType === ConversionType.fromCzk ? "→" : "←";
 
   const czkAmount =
     conversionType === ConversionType.toCzk ? czkPerUnit?.toFixed(3) : 1;
